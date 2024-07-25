@@ -1,21 +1,10 @@
-// import { Injectable } from '@nestjs/common';
-// import { IUserRepository } from "../../repositories/user.repository";
-// import { IStoreRepository } from "../../repositories/store.repository";
-//
-// @Injectable()
-// export class TransferService {
-//   constructor(
-//     private readonly userRepository: IUserRepository,
-//     private readonly storeRepository: IStoreRepository,
-//   ) { }
-//
-//   async transfer(payerId: string, payeeId: string, amount: number): Promise<void>{
-//     const payer = await this.userRepository.findById(payerId);
-//     const payee = await this.userRepository.findById(payeeId) || await this.storeRepository.findById(payeeId);
-//
-//     payer.balance -= amount;
-//     payee.balance += amount;
-//
-//   }
-//
-// }
+import { TransferFundsUseCase } from "../../use-cases/transfer.usecase";
+import { Money } from "../../value-objects/money.vo";
+
+export class TransferService{
+  constructor(private readonly transferFundsUseCase: TransferFundsUseCase) { }
+
+  async transfer(payerId: string, payeeId: string, amount: Money): Promise<void> {
+    await this.transferFundsUseCase.execute(payerId, payeeId, amount);
+  }
+}
