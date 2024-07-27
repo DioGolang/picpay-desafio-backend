@@ -12,7 +12,7 @@ export class UserService {
   ) { }
 
   async createUser(createUserDto : CreateUserDto): Promise<void>{
-    await this.createUserUseCase.execute(createUserDto.fullName, createUserDto.cpf, createUserDto.email, createUserDto.password);
+    await this.createUserUseCase.execute(createUserDto);
   }
 
   async findUserById(id: string): Promise<User | null> {

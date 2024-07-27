@@ -14,10 +14,10 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "{{ $random.alphabetic(10) }}",
-  "cpf": "{{ $random.integer(11, 11) }}",
-  "email": "{{ $random.email() }}",
-  "password": "{{ $random.alphanumeric(10) }}"
+  "fullName": "Ana",
+  "cpf": "43243543587",
+  "email": "ana.borges@oab.com.br",
+  "password": "12345678910"
 }
 
 ###

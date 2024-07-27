@@ -1,15 +1,19 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { User } from "../../@core/entities/user.entity";
 import { CreateUserDto } from "./dto/create-user.dto";
+import { HttpExceptionFilter } from "../../filters/http-exception/http-exception.filter";
 
 @Controller('user')
+@UseFilters(new HttpExceptionFilter())
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @Post()
-  async createStore(@Body() createUserDto : CreateUserDto): Promise<void>{
+  @UsePipes(new ValidationPipe({transform:true}))
+  async createStore(@Body() createUserDto : CreateUserDto): Promise<{ message: string }>{
     await this.userService.createUser(createUserDto);
+    return { message: 'User created successfully' };
   }
 
   @Get(':id')

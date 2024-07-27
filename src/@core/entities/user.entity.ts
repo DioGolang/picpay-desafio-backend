@@ -1,6 +1,10 @@
 import { Money } from "../value-objects/money.vo";
+import { UserValidate } from "../services/validation/user.validate";
 
 export class User{
+
+  private readonly _validator: UserValidate;
+
   constructor(
     public readonly id: string | null,
     public readonly fullName: string,
@@ -8,16 +12,18 @@ export class User{
     public readonly email: string,
     public readonly password: string,
     private _balance: Money,
-  ){ }
+    validator?: UserValidate
+  ){
+    this._validator = validator || new UserValidate();
+    this._validator.validate(this)
+  }
 
   get balance(): Money{
     return this._balance;
   }
 
   static create(fullName: string, cnpj: string, email: string, password: string): User {
-    const user = new User(null, fullName, cnpj, email, password, new Money(0));
-    user.validate()
-    return user;
+    return new User(null, fullName, cnpj, email, password, new Money(0));
   }
 
   deposit(amount: Money): void{
@@ -26,21 +32,6 @@ export class User{
 
   withdraw(amount: Money): void {
     this._balance = this._balance.subtract(amount);
-  }
-
-  private validate(): void {
-    if (!this.fullName || this.fullName.length === 0) {
-      throw new Error('Full name is required');
-    }
-    if (!this.cpf || this.cpf.length !== 11) {
-      throw new Error('CPF must be 11 characters');
-    }
-    if (!this.email || !this.email.includes('@')) {
-      throw new Error('Email is invalid');
-    }
-    if (!this.password || this.password.length < 6) {
-      throw new Error('Password must be at least 6 characters long');
-    }
   }
 
 }
