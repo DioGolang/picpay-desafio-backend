@@ -1,16 +1,19 @@
-import { Controller, Post, Body, Request } from '@nestjs/common';
+import { Controller, Post, Body, Request, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { TransferService } from "../../@core/services/transfer/transfer.service";
-import { Money } from "../../@core/value-objects/money.vo";
+import { HttpExceptionFilter } from "../../filters/http-exception/http-exception.filter";
+import { CreateTransferDto } from "./dto/create-transfer";
+
 
 @Controller('transfer')
+@UseFilters(new HttpExceptionFilter())
 export class TransferController {
   constructor(private readonly transferService: TransferService) { }
 
   @Post()
-  async transfer(@Request() req, @Body() {amount, payeeId} : { amount: number, payeeId: string }){
+  @UsePipes(new ValidationPipe({ transform: true }))
+  async transfer(@Request() req, @Body() createTransferDto: CreateTransferDto) {
+    const { amount, payeeId } = createTransferDto;
     const payerId = req.user.userId;
-    const moneyAmount = new Money(amount);
-    await this.transferService.transfer(payerId, payeeId, moneyAmount);
+    await this.transferService.transfer(payerId, payeeId, amount);
   }
 }
-

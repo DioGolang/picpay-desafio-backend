@@ -1,22 +1,25 @@
-import { Injectable } from '@nestjs/common';
-import { Money } from '../value-objects/money.vo';
+import { Inject, Injectable } from "@nestjs/common";
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import { IUserRepository } from "../repositories/user.repository";
-import { IStoreRepository } from "../repositories/store.repository";
+import { IUserRepository } from '../repositories/user.repository';
+import { IStoreRepository } from '../repositories/store.repository';
+import { CreateTransferDto } from '../../modules/transfer/dto/create-transfer';
+import { Money } from "../value-objects/money.vo";
 
 @Injectable()
 export class TransferFundsUseCase {
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly storeRepository: IStoreRepository,
+    @Inject('IUserRepository') private readonly userRepository: IUserRepository,
+    @Inject('IStoreRepository') private readonly storeRepository: IStoreRepository,
     private readonly httpService: HttpService,
   ) {}
 
-  async execute(payerId: string, payeeId: string, amount: Money): Promise<void> {
+  async execute(createTransferDto: CreateTransferDto): Promise<void> {
+    const { amount, payerId, payeeId } = createTransferDto;
     const payer = await this.userRepository.findById(payerId);
     const payeeUser = await this.userRepository.findById(payeeId);
     const payeeStore = await this.storeRepository.findById(payeeId);
+    const money = new Money(amount);
 
     const payee = payeeUser || payeeStore;
 
@@ -24,19 +27,19 @@ export class TransferFundsUseCase {
       throw new Error('Invalid transaction');
     }
 
-    if (payer.balance.value < amount.value) {
+    if (payer.balance.value < money.value) {
       throw new Error('Insufficient balance');
     }
 
-    payer.withdraw(amount);
+    payer.withdraw(money);
 
     const authorizeResponse = await firstValueFrom(this.httpService.get('https://util.devi.tools/api/v2/authorize'));
     if (!authorizeResponse.data.authorized) {
-      payer.deposit(amount);
+      payer.deposit(money);
       throw new Error('Transaction not authorized');
     }
 
-    payee.deposit(amount);
+    payee.deposit(money);
 
     await this.userRepository.update(payer);
     if (payeeUser) {

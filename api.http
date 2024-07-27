@@ -3,9 +3,9 @@ POST http://localhost:3000/store
 Content-Type: application/json
 
 {
-  "fullName": "IreNeide",
-  "cnpj": "12345678910120",
-  "email": "IreNeide@realstate.com",
+  "fullName": "Lili",
+  "cnpj": "12345678913420",
+  "email": "Lili@realstate.com",
   "password": "{{ $random.alphanumeric(10) }}"
 }
 
@@ -14,9 +14,9 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "Ana",
-  "cpf": "43243543587",
-  "email": "ana.borges@oab.com.br",
+  "fullName": "Gilvannia",
+  "cpf": "43243543581",
+  "email": "gi@oab.com.br",
   "password": "12345678910"
 }
 

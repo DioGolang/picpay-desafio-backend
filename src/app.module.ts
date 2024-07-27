@@ -9,12 +9,19 @@ import { UserController } from './modules/user/user.controller';
 import { StoreController } from './modules/store/store.controller';
 import { StoreModule } from './modules/store/store.module';
 import { UserModule } from './modules/user/user.module';
+import { TransferModule } from './modules/transfer/transfer.module';
+import { HttpModule } from "@nestjs/axios";
+import { TransferUsecaseModule } from "./modules/transfer/transfer-usecase/transfer-usecase.module";
+
 
 @Module({
   imports: [
     PrismaModule,
     StoreModule,
-    UserModule
+    UserModule,
+    TransferModule,
+    HttpModule,
+    TransferUsecaseModule,
   ],
   controllers: [AppController, TransferController, UserController, StoreController],
   providers: [

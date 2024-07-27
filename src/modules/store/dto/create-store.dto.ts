@@ -11,6 +11,7 @@ export class CreateStoreDto {
   cnpj: string;
 
   // @Validate(IsUniqueConstraint, ['email'], {message: "Email must be unique"})
+  @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Email is invalid' })
   email: string;
 
