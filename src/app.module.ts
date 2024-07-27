@@ -20,7 +20,7 @@ import { UserModule } from './modules/user/user.module';
   providers: [
     AppService,
     PrismaService,
-    TransferService
+    TransferService,
   ],
 })
 export class AppModule {}

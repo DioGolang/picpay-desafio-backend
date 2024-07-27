@@ -57,4 +57,13 @@ export class UserRepository implements IUserRepository {
     await this.prisma.user.delete({ where: { id } });
   }
 
+  async findOne(conditions: { [key: string]: any }): Promise<User | null> {
+    try {
+      const user = await this.prisma.user.findFirst({ where: conditions });
+      return user ? this.mapToUser(user) : null;
+    } catch (error) {
+      throw new Error(`Error finding user with conditions ${JSON.stringify(conditions)}: ${error.message}`);
+    }
+  }
+
 }

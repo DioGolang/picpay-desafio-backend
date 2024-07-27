@@ -2,40 +2,41 @@ import { Store } from "src/@core/entities/store.entity";
 import { IStoreRepository } from "../../@core/repositories/store.repository";
 import { PrismaService } from "./prisma/prisma.service";
 import { Money } from "../../@core/value-objects/money.vo";
+import { Injectable } from "@nestjs/common";
 
-
+@Injectable()
 export class StoreRepository implements IStoreRepository {
 
   constructor(private prisma: PrismaService) { }
 
-  private mapToUser(user: any): Store {
-    return new Store(user.id, user.fullName, user.cnpj, user.email, user.password, new Money(user.balance));
+  private mapToStore(store: any): Store {
+    return new Store(store.id, store.fullName, store.cnpj, store.email, store.password, new Money(store.balance));
   }
 
  async findById(id: string): Promise<Store> {
-    const user = await this.prisma.store.findUnique({where: {id}});
-   return this.mapToUser(user);
+    const store = await this.prisma.store.findUnique({where: {id}});
+   return this.mapToStore(store);
   }
    async findByEmail(email: string): Promise<Store> {
-      const user = await this.prisma.store.findUnique({ where: { email } });
-     return this.mapToUser(user);
+      const store = await this.prisma.store.findUnique({ where: { email } });
+     return this.mapToStore(store);
     }
 
     async findByCnpj(cnpj: string): Promise<Store> {
-    const user = await this.prisma.store.findUnique({where : { cnpj }});
-      return this.mapToUser(user);
+    const store = await this.prisma.store.findUnique({where : { cnpj }});
+      return this.mapToStore(store);
     }
 
    async save(entity: Store): Promise<void> {
         await this.prisma.store.create({
-          data:{
+          data: {
             fullName: entity.fullName,
             cnpj: entity.cnpj,
             email: entity.email,
             password: entity.password,
             balance: entity.balance.value,
-          }
-        })
+          },
+        });
     }
    async update(entity: Store): Promise<void> {
         await this.prisma.store.update({
@@ -46,13 +47,22 @@ export class StoreRepository implements IStoreRepository {
             email: entity.email,
             password: entity.password,
             balance: entity.balance.value,
-          }
+          },
 
-        })
+        });
     }
 
     async delete(id: string): Promise<void> {
        await this.prisma.store.delete({where: { id } });
     }
+
+  async findOne(conditions: { [key: string]: any }): Promise<Store | null> {
+    try {
+      const store = await this.prisma.store.findFirst({ where: conditions });
+      return store ? this.mapToStore(store) : null;
+    } catch (error) {
+      throw new Error(`Error finding store with conditions ${JSON.stringify(conditions)}: ${error.message}`);
+    }
+  }
 
 }

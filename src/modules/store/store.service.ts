@@ -1,7 +1,9 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable } from "@nestjs/common";
 import { CreateStoreUsecase } from "../../@core/use-cases/create-store.usecase";
 import { IStoreRepository } from "../../@core/repositories/store.repository";
 import { Store } from "../../@core/entities/store.entity";
+import { CreateStoreDto } from "./dto/create-store.dto";
+import { IsUniqueConstraint } from "../../validators/is-unique.validator";
 
 
 @Injectable()
@@ -11,8 +13,8 @@ export class StoreService {
     @Inject('IStoreRepository') private readonly storeRepository: IStoreRepository
   ) { }
 
-  async createStore(fullName: string, cnpj: string, email: string, password: string):Promise<void>{
-    await this.createStoreUseCase.execute(fullName, cnpj, email, password);
+  async createStore(createStoreDto: CreateStoreDto):Promise<void>{
+    await this.createStoreUseCase.execute(createStoreDto);
   }
 
   async findStoreById(id: string): Promise<Store | null>{

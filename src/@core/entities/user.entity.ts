@@ -15,7 +15,9 @@ export class User{
   }
 
   static create(fullName: string, cnpj: string, email: string, password: string): User {
-    return new User(null, fullName, cnpj, email, password, new Money(0));
+    const user = new User(null, fullName, cnpj, email, password, new Money(0));
+    user.validate()
+    return user;
   }
 
   deposit(amount: Money): void{
@@ -24,6 +26,21 @@ export class User{
 
   withdraw(amount: Money): void {
     this._balance = this._balance.subtract(amount);
+  }
+
+  private validate(): void {
+    if (!this.fullName || this.fullName.length === 0) {
+      throw new Error('Full name is required');
+    }
+    if (!this.cpf || this.cpf.length !== 11) {
+      throw new Error('CPF must be 11 characters');
+    }
+    if (!this.email || !this.email.includes('@')) {
+      throw new Error('Email is invalid');
+    }
+    if (!this.password || this.password.length < 6) {
+      throw new Error('Password must be at least 6 characters long');
+    }
   }
 
 }

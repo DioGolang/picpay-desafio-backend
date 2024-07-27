@@ -1,9 +1,27 @@
-
+### Create Store
 POST http://localhost:3000/store
+Content-Type: application/json
+
+{
+  "fullName": "IreNeide",
+  "cnpj": "12345678910120",
+  "email": "IreNeide@realstate.com",
+  "password": "{{ $random.alphanumeric(10) }}"
+}
+
+### Create User
+POST http://localhost:3000/user
+Content-Type: application/json
+
+{
+  "fullName": "{{ $random.alphabetic(10) }}",
+  "cpf": "{{ $random.integer(11, 11) }}",
+  "email": "{{ $random.email() }}",
+  "password": "{{ $random.alphanumeric(10) }}"
+}
 
 ###
 GET http://localhost:3000/store
 
 ###
 GET http://localhost:3000/user
-

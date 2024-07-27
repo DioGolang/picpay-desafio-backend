@@ -1,14 +1,19 @@
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
 import { StoreService } from "./store.service";
 import { Store } from "../../@core/entities/store.entity";
+import { CreateStoreDto } from "./dto/create-store.dto";
+import { HttpExceptionFilter } from "../../filters/http-exception/http-exception.filter";
 
 @Controller('store')
+@UseFilters(new HttpExceptionFilter())
 export class StoreController {
   constructor(private readonly storeService: StoreService) { }
 
   @Post()
-  async createStore(@Body(){ fullName, cnpj, email, password } : { fullName: string, cnpj : string, email: string, password:string}): Promise<void>{
-    await this.storeService.createStore(fullName, cnpj, email, password);
+  @UsePipes(new ValidationPipe({transform:true}))
+  async createStore(@Body() createStoreDto: CreateStoreDto): Promise<{ message: string }>{
+    await this.storeService.createStore(createStoreDto);
+    return { message: 'Store created successfully' };
   }
 
   @Get(':id')

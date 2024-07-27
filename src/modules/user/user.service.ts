@@ -2,6 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { CreateUserUsecase } from "../../@core/use-cases/create-user.usecase";
 import { IUserRepository } from "../../@core/repositories/user.repository";
 import { User } from "../../@core/entities/user.entity";
+import { CreateUserDto } from "./dto/create-user.dto";
 
 @Injectable()
 export class UserService {
@@ -10,8 +11,8 @@ export class UserService {
     @Inject('IUserRepository') private readonly userRepository: IUserRepository
   ) { }
 
-  async createUser(fullName: string, cpf: string, email: string, password: string): Promise<void>{
-    await this.createUserUseCase.execute(fullName, cpf, email, password);
+  async createUser(createUserDto : CreateUserDto): Promise<void>{
+    await this.createUserUseCase.execute(createUserDto.fullName, createUserDto.cpf, createUserDto.email, createUserDto.password);
   }
 
   async findUserById(id: string): Promise<User | null> {
