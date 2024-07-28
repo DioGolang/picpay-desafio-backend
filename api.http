@@ -14,14 +14,29 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "Gilvannia",
-  "cpf": "43243543581",
-  "email": "gi@oab.com.br",
+  "fullName": "Gilvannia Vasconcelos",
+  "cpf": "43243543576",
+  "email": "gilvania@oab.com.br",
   "password": "12345678910"
 }
 
 ###
-GET http://localhost:3000/store
+POST http://localhost:3000/transfer
+Content-Type: application/json
+
+{
+  "amount": 400,
+  "payerId": "9fe29330-d012-4f26-a7ad-07bb420d3513",
+  "payeeId": "d02ae711-fd7c-41e3-ba6b-ea956ccb4aa4"
+}
+
+###
+GET http://localhost:3000/user/9fe29330-d012-4f26-a7ad-07bb420d3513
+Content-Type: application/json
+
+###
+GET http://localhost:3000/store/d02ae711-fd7c-41e3-ba6b-ea956ccb4aa4
+Content-Type: application/json
 
 ###
 GET http://localhost:3000/user

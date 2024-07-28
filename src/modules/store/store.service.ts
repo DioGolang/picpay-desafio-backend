@@ -4,6 +4,7 @@ import { IStoreRepository } from "../../@core/repositories/store.repository";
 import { Store } from "../../@core/entities/store.entity";
 import { CreateStoreDto } from "./dto/create-store.dto";
 import { IsUniqueConstraint } from "../../validators/is-unique.validator";
+import { User } from "../../@core/entities/user.entity";
 
 
 @Injectable()
@@ -23,6 +24,10 @@ export class StoreService {
 
   async findStoreByEmail(email: string ): Promise<Store | null>{
     return await this.storeRepository.findByEmail(email);
+  }
+
+  async findStoreByOne(idOrEmail: string): Promise<Store | null>{
+    return await this.storeRepository.findOne(idOrEmail);
   }
 
 }

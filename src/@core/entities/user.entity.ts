@@ -1,7 +1,9 @@
 import { Money } from "../value-objects/money.vo";
 import { UserValidate } from "../services/validation/user.validate";
+import { Payer } from "../interfaces/payer.interface";
+import { Payee } from "../interfaces/payee.interface";
 
-export class User{
+export class User implements Payer, Payee{
 
   private readonly _validator: UserValidate;
 

@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, UseFilters, UsePipes, ValidationPip
 import { UserService } from "./user.service";
 import { User } from "../../@core/entities/user.entity";
 import { CreateUserDto } from "./dto/create-user.dto";
-import { HttpExceptionFilter } from "../../filters/http-exception/http-exception.filter";
+import { HttpExceptionFilter } from "../../common/filters/http-exception/http-exception.filter";
 
 @Controller('user')
 @UseFilters(new HttpExceptionFilter())
@@ -17,13 +17,19 @@ export class UserController {
   }
 
   @Get(':id')
+  @UsePipes(new ValidationPipe({transform:true}))
   async getUserById(@Param('id') id: string): Promise<User | null> {
-    return await this.userService.findUserById(id);
+    try {
+      return await this.userService.findUserById(id);
+    } catch (error) {
+      console.error('Error in getUserById:', error);
+      throw error;
+    }
   }
 
   @Get('email/:email')
   async getUserByEmail(@Param('email') email: string): Promise<User | null> {
-    return await this.userService.findStoreByEmail(email);
+    return await this.userService.findUserByEmail(email);
   }
 
 }

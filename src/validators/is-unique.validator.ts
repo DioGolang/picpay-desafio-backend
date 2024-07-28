@@ -9,7 +9,7 @@ export class IsUniqueConstraint<T> implements ValidatorConstraintInterface {
 
   async validate(value: any, args: ValidationArguments): Promise<boolean> {
     const [property] = args.constraints;
-    const entity = await this.repository.findOne({ [property]: value });
+    const entity = await this.repository.findByConditions({ [property]: value });
     return !entity;
   }
 

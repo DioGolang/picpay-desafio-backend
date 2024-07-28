@@ -1,7 +1,8 @@
 import { Money } from "../value-objects/money.vo";
 import { StoreValidate } from "../services/validation/store.validate";
+import { Payee } from "../interfaces/payee.interface";
 
-export class Store {
+export class Store implements Payee {
   private readonly _validator: StoreValidate;
 
   constructor(
@@ -32,4 +33,6 @@ export class Store {
   withdraw(amount: Money): void {
     this._balance = this._balance.subtract(amount);
   }
+
+
 }

@@ -1,6 +1,5 @@
 import { IsNotEmpty, IsNumber, IsUUID } from "class-validator";
-//  @ValidateNested()  // Validates nested objects
-//   @Type(() => Money) // Transforms the input to the Money class
+
 export class CreateTransferDto {
 
   @IsNotEmpty({ message: 'Amount is required' })

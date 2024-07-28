@@ -3,6 +3,7 @@ import { IStoreRepository } from "../../@core/repositories/store.repository";
 import { PrismaService } from "./prisma/prisma.service";
 import { Money } from "../../@core/value-objects/money.vo";
 import { Injectable } from "@nestjs/common";
+import { isUUID } from "class-validator";
 
 @Injectable()
 export class StoreRepository implements IStoreRepository {
@@ -17,6 +18,22 @@ export class StoreRepository implements IStoreRepository {
     const store = await this.prisma.store.findUnique({where: {id}});
    return this.mapToStore(store);
   }
+
+  async findOne(idOrEmail: string): Promise<Store> {
+    const isId = isUUID(idOrEmail, 4);
+    const store = await this.prisma.store.findFirst({
+      where: isId
+        ? { id: idOrEmail }
+        : { email: idOrEmail }
+    });
+
+    if (!store) {
+      return null;
+    }
+
+    return this.mapToStore(store);
+  }
+
    async findByEmail(email: string): Promise<Store> {
       const store = await this.prisma.store.findUnique({ where: { email } });
      return this.mapToStore(store);
@@ -56,7 +73,7 @@ export class StoreRepository implements IStoreRepository {
        await this.prisma.store.delete({where: { id } });
     }
 
-  async findOne(conditions: { [key: string]: any }): Promise<Store | null> {
+  async findByConditions(conditions: { [key: string]: any }): Promise<Store | null> {
     try {
       const store = await this.prisma.store.findFirst({ where: conditions });
       return store ? this.mapToStore(store) : null;

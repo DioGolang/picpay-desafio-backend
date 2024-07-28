@@ -1,17 +1,24 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import { IUserRepository } from '../repositories/user.repository';
 import { IStoreRepository } from '../repositories/store.repository';
-import { CreateTransferDto } from '../../modules/transfer/dto/create-transfer';
+import { CreateTransferDto } from '../../modules/transfer/dto/create-transfer.dto';
 import { Money } from "../value-objects/money.vo";
+import { TransactionRepository } from "../../infrastructure/database/transaction.repository";
+import { TransferDomainService } from "../services/transfer-domain/transfer-domain.service";
+import { AuthorizationService } from "../../infrastructure/external/authorization/authorization.service";
+import { NotificationService } from "../../infrastructure/external/notification/notification.service";
+import { PrismaService } from "../../infrastructure/database/prisma/prisma.service";
 
 @Injectable()
 export class TransferFundsUseCase {
   constructor(
     @Inject('IUserRepository') private readonly userRepository: IUserRepository,
     @Inject('IStoreRepository') private readonly storeRepository: IStoreRepository,
-    private readonly httpService: HttpService,
+    private readonly transferRepository: TransactionRepository,
+    private readonly prisma: PrismaService,
+    private readonly transferDomainService: TransferDomainService,
+    private readonly authorizationService: AuthorizationService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   async execute(createTransferDto: CreateTransferDto): Promise<void> {
@@ -21,7 +28,7 @@ export class TransferFundsUseCase {
     const payeeStore = await this.storeRepository.findById(payeeId);
     const money = new Money(amount);
 
-    const payee = payeeUser || payeeStore;
+     const payee = payeeUser || payeeStore;
 
     if (!payer || !payee) {
       throw new Error('Invalid transaction');
@@ -31,27 +38,26 @@ export class TransferFundsUseCase {
       throw new Error('Insufficient balance');
     }
 
-    payer.withdraw(money);
+    await this.prisma.$transaction(async (prisma) => {
+      try {
+        // const isAuthorized = await this.authorizationService.authorize();
+        // if (!isAuthorized) {
+        //   throw new Error('Transaction not authorized');
+        // }
 
-    const authorizeResponse = await firstValueFrom(this.httpService.get('https://util.devi.tools/api/v2/authorize'));
-    if (!authorizeResponse.data.authorized) {
-      payer.deposit(money);
-      throw new Error('Transaction not authorized');
-    }
+        const transfer = await this.transferDomainService.initiateTransfer(payer, payee, money);
+        await this.transferRepository.save(transfer);
 
-    payee.deposit(money);
+        const notificationMessage = `You have received a payment of ${amount} from ${payerId}`;
+        const isNotified = await this.notificationService.notify(payee.email, notificationMessage);
+        if (!isNotified) {
+          console.warn('Notification failed, but transaction will proceed');
+        }
 
-    await this.userRepository.update(payer);
-    if (payeeUser) {
-      await this.userRepository.update(payeeUser);
-    } else if (payeeStore) {
-      await this.storeRepository.update(payeeStore);
-    }
-
-    try {
-      await firstValueFrom(this.httpService.post('https://util.devi.tools/api/v1/notify', { payeeId }));
-    } catch (error) {
-      // Handle notification failure, but don't fail the entire transaction
-    }
+      } catch (error) {
+        await this.transferDomainService.rollbackTransfer(payer, payee, money);
+        throw error;
+      }
+    });
   }
 }

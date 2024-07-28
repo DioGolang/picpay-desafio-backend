@@ -16,12 +16,21 @@ export class UserService {
   }
 
   async findUserById(id: string): Promise<User | null> {
-    return await this.userRepository.findById(id);
+    try {
+      return await this.userRepository.findById(id);
+    } catch (error) {
+      console.error('Error in findUserById:', error);
+      throw error;
+    }
   }
 
-    async findStoreByEmail(email: string ): Promise<User | null>{
+    async findUserByEmail(email: string ): Promise<User | null>{
       return await this.userRepository.findByEmail(email);
     }
+
+  async findUserByOne(idOrEmail: string): Promise<User | null>{
+    return await this.userRepository.findOne(idOrEmail);
+  }
 
   }
 

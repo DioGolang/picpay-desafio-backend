@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, UseFilters, UsePipes, ValidationPip
 import { StoreService } from "./store.service";
 import { Store } from "../../@core/entities/store.entity";
 import { CreateStoreDto } from "./dto/create-store.dto";
-import { HttpExceptionFilter } from "../../filters/http-exception/http-exception.filter";
+import { HttpExceptionFilter } from "../../common/filters/http-exception/http-exception.filter";
 
 @Controller('store')
 @UseFilters(new HttpExceptionFilter())
@@ -17,6 +17,7 @@ export class StoreController {
   }
 
   @Get(':id')
+  @UsePipes(new ValidationPipe({transform:true}))
   async getUserById(@Param('id') id: string): Promise<Store | null> {
     return await this.storeService.findStoreById(id);
   }
