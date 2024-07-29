@@ -8,6 +8,8 @@ import { TransferDomainService } from "../../../@core/services/transfer-domain/t
 import { AuthorizationService } from "../../../infrastructure/external/authorization/authorization.service";
 import { NotificationService } from "../../../infrastructure/external/notification/notification.service";
 import { TransactionRepository } from "../../../infrastructure/database/transaction.repository";
+import { UserUpdateStrategy } from "../../../@core/entities/strategies/user-update.strategy";
+import { StoreUpdateStrategy } from "../../../@core/entities/strategies/store-update.strategy";
 
 @Module({
   imports: [HttpModule],
@@ -27,6 +29,14 @@ import { TransactionRepository } from "../../../infrastructure/database/transact
     {
       provide: 'IStoreRepository',
       useClass: StoreRepository,
+    },
+    {
+      provide: 'UserUpdateStrategy',
+      useClass: UserUpdateStrategy,
+    },
+    {
+      provide: 'StoreUpdateStrategy',
+      useClass: StoreUpdateStrategy,
     },
   ],
   exports: [TransferFundsUseCase],

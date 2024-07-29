@@ -1,4 +1,13 @@
-import { Controller, Post, Body, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  UseFilters,
+  UsePipes,
+  ValidationPipe,
+  HttpException,
+  HttpStatus
+} from "@nestjs/common";
 import { HttpExceptionFilter } from "../../common/filters/http-exception/http-exception.filter";
 import { CreateTransferDto } from "./dto/create-transfer.dto";
 import { TransferService } from "./transfer.service";
@@ -11,7 +20,10 @@ export class TransferController {
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
   async transfer(@Body() createTransferDto: CreateTransferDto) {
-  //  const { amount, payerId, payeeId } = createTransferDto;
-    await this.transferService.executeTransfer(createTransferDto);
+    try {
+      await this.transferService.executeTransfer(createTransferDto);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
   }
 }

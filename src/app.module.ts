@@ -13,20 +13,14 @@ import { UserService } from "./modules/user/user.service";
 import { CreateUserUsecase } from "./@core/use-cases/create-user.usecase";
 import { StoreService } from "./modules/store/store.service";
 import { CreateStoreUsecase } from "./@core/use-cases/create-store.usecase";
+import { IsUniqueConstraint } from "./validators/is-unique.validator";
+import { StoreModule } from "./modules/store/store.module";
 
 @Module({
-  imports: [TransferUsecaseModule],
+  imports: [TransferUsecaseModule, StoreModule],
   controllers: [AppController, TransferController, UserController, StoreController],
   providers: [
     PrismaService,
-    UserRepository,
-    StoreRepository,
-    AppService,
-    TransferService,
-    UserService,
-    CreateUserUsecase,
-    CreateStoreUsecase,
-    StoreService,
     {
       provide: 'IUserRepository',
       useClass: UserRepository,
@@ -35,6 +29,17 @@ import { CreateStoreUsecase } from "./@core/use-cases/create-store.usecase";
       provide: 'IStoreRepository',
       useClass: StoreRepository,
     },
+    {
+      provide: 'IRepository<Store>',
+      useClass: StoreRepository,
+    },
+    IsUniqueConstraint,
+    AppService,
+    TransferService,
+    UserService,
+    CreateUserUsecase,
+    CreateStoreUsecase,
+    StoreService,
   ],
 })
 export class AppModule {}

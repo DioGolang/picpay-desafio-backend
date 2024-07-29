@@ -3,9 +3,9 @@ POST http://localhost:3000/store
 Content-Type: application/json
 
 {
-  "fullName": "Lili",
-  "cnpj": "12345678913420",
-  "email": "Lili@realstate.com",
+  "fullName": "Terrorista",
+  "cnpj": "12345678911260",
+  "email": "terror@realstate.com",
   "password": "{{ $random.alphanumeric(10) }}"
 }
 
@@ -14,10 +14,10 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "Gilvannia Vasconcelos",
-  "cpf": "43243543576",
-  "email": "gilvania@oab.com.br",
-  "password": "12345678910"
+  "fullName": "DVasconcelos",
+  "cpf": "43243543570",
+  "email": "diogovasco@crecisp.com.br",
+  "password": "17645678910"
 }
 
 ###

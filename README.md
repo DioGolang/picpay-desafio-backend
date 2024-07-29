@@ -74,9 +74,11 @@ Cada classe no projeto tem uma única responsabilidade, e as dependências são 
 ```bash
 $ docker compose up
 ```
-
 ```bash
 $ npm install
+```
+```bash
+$ npx prisma migrate dev 
 ```
 
 ## Running the app

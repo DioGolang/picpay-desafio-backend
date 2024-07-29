@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException, HttpStatus,
+  Param,
+  Post,
+  UseFilters,
+  UsePipes,
+  ValidationPipe
+} from "@nestjs/common";
 import { StoreService } from "./store.service";
 import { Store } from "../../@core/entities/store.entity";
 import { CreateStoreDto } from "./dto/create-store.dto";
@@ -12,19 +22,31 @@ export class StoreController {
   @Post()
   @UsePipes(new ValidationPipe({transform:true}))
   async createStore(@Body() createStoreDto: CreateStoreDto): Promise<{ message: string }>{
-    await this.storeService.createStore(createStoreDto);
-    return { message: 'Store created successfully' };
+    try {
+      await this.storeService.createStore(createStoreDto);
+      return { message: 'Store created successfully' };
+    } catch (error){
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
   }
 
   @Get(':id')
   @UsePipes(new ValidationPipe({transform:true}))
   async getUserById(@Param('id') id: string): Promise<Store | null> {
-    return await this.storeService.findStoreById(id);
+    try {
+      return await this.storeService.findStoreById(id);
+    }catch (error){
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
   }
 
   @Get('email/:email')
   async getUserByEmail(@Param('email') email: string): Promise<Store | null> {
-    return await this.storeService.findStoreByEmail(email);
+    try {
+      return await this.storeService.findStoreByEmail(email);
+    }catch (error){
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
   }
 
 }

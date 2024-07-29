@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, UseFilters, UsePipes, ValidationPipe } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException, HttpStatus,
+  Param,
+  Post,
+  UseFilters,
+  UsePipes,
+  ValidationPipe
+} from "@nestjs/common";
 import { UserService } from "./user.service";
 import { User } from "../../@core/entities/user.entity";
 import { CreateUserDto } from "./dto/create-user.dto";
@@ -12,8 +22,12 @@ export class UserController {
   @Post()
   @UsePipes(new ValidationPipe({transform:true}))
   async createStore(@Body() createUserDto : CreateUserDto): Promise<{ message: string }>{
-    await this.userService.createUser(createUserDto);
-    return { message: 'User created successfully' };
+    try {
+      await this.userService.createUser(createUserDto);
+      return { message: 'User created successfully' };
+    }catch (error){
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
   }
 
   @Get(':id')
@@ -22,14 +36,17 @@ export class UserController {
     try {
       return await this.userService.findUserById(id);
     } catch (error) {
-      console.error('Error in getUserById:', error);
-      throw error;
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
     }
   }
 
   @Get('email/:email')
   async getUserByEmail(@Param('email') email: string): Promise<User | null> {
-    return await this.userService.findUserByEmail(email);
+    try {
+      return await this.userService.findUserByEmail(email);
+    }catch (error){
+      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
+    }
   }
 
 }

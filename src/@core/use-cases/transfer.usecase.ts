@@ -1,4 +1,7 @@
-import { Inject, Injectable } from "@nestjs/common";
+import {
+  Inject,
+  Injectable,
+} from "@nestjs/common";
 import { IUserRepository } from '../repositories/user.repository';
 import { IStoreRepository } from '../repositories/store.repository';
 import { CreateTransferDto } from '../../modules/transfer/dto/create-transfer.dto';
@@ -27,32 +30,18 @@ export class TransferFundsUseCase {
     const payeeUser = await this.userRepository.findById(payeeId);
     const payeeStore = await this.storeRepository.findById(payeeId);
     const money = new Money(amount);
-
-     const payee = payeeUser || payeeStore;
-
-    if (!payer || !payee) {
-      throw new Error('Invalid transaction');
-    }
-
-    if (payer.balance.value < money.value) {
-      throw new Error('Insufficient balance');
-    }
+    const payee = payeeUser || payeeStore;
 
     await this.prisma.$transaction(async (prisma) => {
       try {
-        // const isAuthorized = await this.authorizationService.authorize();
-        // if (!isAuthorized) {
-        //   throw new Error('Transaction not authorized');
-        // }
+         await this.authorizationService.authorize();
 
         const transfer = await this.transferDomainService.initiateTransfer(payer, payee, money);
         await this.transferRepository.save(transfer);
 
         const notificationMessage = `You have received a payment of ${amount} from ${payerId}`;
-        const isNotified = await this.notificationService.notify(payee.email, notificationMessage);
-        if (!isNotified) {
-          console.warn('Notification failed, but transaction will proceed');
-        }
+        await this.notificationService.notify(payee.email, notificationMessage);
+
 
       } catch (error) {
         await this.transferDomainService.rollbackTransfer(payer, payee, money);
