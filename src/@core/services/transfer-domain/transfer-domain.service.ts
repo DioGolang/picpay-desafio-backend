@@ -20,21 +20,27 @@ export class TransferDomainService {
    * @param amount The amount to be transferred.
    */
   async initiateTransfer(payer: User, payee: User | Store, amount: Money): Promise<Transaction> {
+    const transfer = new Transaction(null, amount, payer, payee, TransferStatus.PENDING);
+
     try {
-      payer.withdraw(amount);
-      payee.deposit(amount);
-
+      transfer.transfer();
       await this.userUpdateStrategy.update(payer);
-      await this.getUpdateStrategy(payee).update(payee);
 
-      const transfer = new Transaction(null, amount, payer, payee, TransferStatus.PENDING);
-      transfer.validateSufficientBalance();
-      transfer.complete();
+      try {
+        await this.getUpdateStrategy(payee).update(payee);
+      } catch (updateError) {
 
-      return transfer;
+        transfer.rollbackPartial()
+        await this.userUpdateStrategy.update(payer);
+        throw new Error('Error updating payee: ' + updateError.message);
+      }
+
     } catch (error) {
+      transfer.fail();
       throw new Error('Error initiating transfer: ' + error.message);
     }
+
+    return transfer;
   }
 
   /**
@@ -45,9 +51,10 @@ export class TransferDomainService {
    */
   async rollbackTransfer(payer: User, payee: User | Store, amount: Money): Promise<void> {
     try {
-      payee.withdraw(amount);
-      payer.deposit(amount);
 
+      const transfer = new Transaction(null, amount, payer, payee, TransferStatus.PENDING);
+
+      transfer.rollback()
       await this.userUpdateStrategy.update(payer);
       await this.getUpdateStrategy(payee).update(payee);
     } catch (error) {

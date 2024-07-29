@@ -33,6 +33,13 @@ export class Transaction {
     this.status = TransferStatus.COMPLETED;
   }
 
+  transfer():void{
+    this.validateSufficientBalance();
+    this.payer.withdraw(this.amount);
+    this.payee.deposit(this.amount);
+    this.complete();
+  }
+
   fail(): void {
     this.status = TransferStatus.FAILED;
   }
@@ -42,4 +49,9 @@ export class Transaction {
     this.payee.withdraw(this.amount);
     this.fail();
   }
+
+  rollbackPartial(): void {
+    this.payer.deposit(this.amount);
+  }
+
 }

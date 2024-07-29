@@ -11,6 +11,8 @@ import { TransferDomainService } from "../services/transfer-domain/transfer-doma
 import { AuthorizationService } from "../../infrastructure/external/authorization/authorization.service";
 import { NotificationService } from "../../infrastructure/external/notification/notification.service";
 import { PrismaService } from "../../infrastructure/database/prisma/prisma.service";
+import { Transaction } from "../entities/transaction.entity";
+import { TransferStatus } from "../entities/transaction-status.enum";
 
 @Injectable()
 export class TransferFundsUseCase {
@@ -33,6 +35,7 @@ export class TransferFundsUseCase {
     const payee = payeeUser || payeeStore;
 
     await this.prisma.$transaction(async (prisma) => {
+      let transfer: Transaction;
       try {
          await this.authorizationService.authorize();
 
@@ -44,7 +47,9 @@ export class TransferFundsUseCase {
 
 
       } catch (error) {
-        await this.transferDomainService.rollbackTransfer(payer, payee, money);
+        if (transfer && transfer.status === TransferStatus.COMPLETED) {
+          await this.transferDomainService.rollbackTransfer(payer, payee, money);
+        }
         throw error;
       }
     });
