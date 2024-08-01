@@ -1,4 +1,3 @@
-// repository.module.ts
 import { Module } from '@nestjs/common';
 import { UserRepository } from "../../infrastructure/database/user.repository";
 import { PrismaService } from "../../infrastructure/database/prisma/prisma.service";

@@ -4,9 +4,10 @@ import { StoreService } from './store.service';
 import { StoreUsecaseModule } from './store-usecase/store.usecase.module';
 
 @Module({
+  imports: [StoreUsecaseModule],
   controllers: [StoreController],
   providers: [StoreService],
   exports: [StoreService],
-  imports: [StoreUsecaseModule],
+
 })
 export class StoreModule {}

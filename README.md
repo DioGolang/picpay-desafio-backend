@@ -69,6 +69,22 @@ Cada classe no projeto tem uma única responsabilidade, e as dependências são 
 
 ---
 
+## Settings
+
+1. crie uma arquivo .env: 
+
+```dotenv
+POSTGRES_DB=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+RABBITMQ_DEFAULT_USER=
+RABBITMQ_DEFAULT_PASS=
+
+```
+2. crie as pastas na raiz: 
+- docker/postgres 
+- docker/rabbitmq_data
+
 ## Installation
 
 ```bash

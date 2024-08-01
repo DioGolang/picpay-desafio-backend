@@ -3,9 +3,9 @@ POST http://localhost:3000/store
 Content-Type: application/json
 
 {
-  "fullName": "Terrorista",
-  "cnpj": "12345678911260",
-  "email": "terror@realstate.com",
+  "fullName": "Catita23",
+  "cnpj": "55545678911262",
+  "email": "catita2@realstate.com",
   "password": "{{ $random.alphanumeric(10) }}"
 }
 
@@ -14,9 +14,9 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "DVasconcelos",
-  "cpf": "43243543570",
-  "email": "diogovasco@crecisp.com.br",
+  "fullName": "DiogoCampos",
+  "cpf": "46643543573",
+  "email": "diogocamp@crecisp.org.br",
   "password": "17645678910"
 }
 

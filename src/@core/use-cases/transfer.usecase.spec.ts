@@ -5,7 +5,6 @@ import { TransactionRepository } from '../../infrastructure/database/transaction
 import { PrismaService } from '../../infrastructure/database/prisma/prisma.service';
 import { TransferDomainService } from '../services/transfer-domain/transfer-domain.service';
 import { AuthorizationService } from '../../infrastructure/external/authorization/authorization.service';
-import { NotificationService } from '../../infrastructure/external/notification/notification.service';
 import { CreateTransferDto } from '../../modules/transfer/dto/create-transfer.dto';
 import { Money } from '../value-objects/money.vo';
 import { TransferFundsUseCase } from './transfer.usecase';
@@ -13,6 +12,9 @@ import { User } from '../entities/user.entity';
 import { Store } from '../entities/store.entity';
 import { Transaction} from '../entities/transaction.entity';
 import { TransferStatus } from "../entities/transaction-status.enum";
+import {
+  RabbitmqNotificationService
+} from "../../infrastructure/external/notification/rabbitmq-notification/rabbitmq-notification.service";
 
 jest.mock('../repositories/user.repository');
 jest.mock('../repositories/store.repository');
@@ -20,7 +22,7 @@ jest.mock('../../infrastructure/database/transaction.repository');
 jest.mock('../../infrastructure/database/prisma/prisma.service');
 jest.mock('../services/transfer-domain/transfer-domain.service');
 jest.mock('../../infrastructure/external/authorization/authorization.service');
-jest.mock('../../infrastructure/external/notification/notification.service');
+jest.mock('../../infrastructure/external/notification/rabbitmq-notification/rabbitmq-notification.service');
 
 describe('TransferFundsUseCase', () => {
   let transferFundsUseCase: TransferFundsUseCase;
@@ -30,7 +32,7 @@ describe('TransferFundsUseCase', () => {
   let prismaService: jest.Mocked<PrismaService>;
   let transferDomainService: jest.Mocked<TransferDomainService>;
   let authorizationService: jest.Mocked<AuthorizationService>;
-  let notificationService: jest.Mocked<NotificationService>;
+  let notificationService: jest.Mocked<RabbitmqNotificationService>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -42,7 +44,7 @@ describe('TransferFundsUseCase', () => {
         { provide: PrismaService, useValue: prismaService },
         { provide: TransferDomainService, useValue: transferDomainService },
         { provide: AuthorizationService, useValue: authorizationService },
-        { provide: NotificationService, useValue: notificationService },
+        { provide: RabbitmqNotificationService, useValue: notificationService },
       ],
     }).compile();
 
@@ -53,7 +55,7 @@ describe('TransferFundsUseCase', () => {
     prismaService = module.get<PrismaService>(PrismaService) as jest.Mocked<PrismaService>;
     transferDomainService = module.get<TransferDomainService>(TransferDomainService) as jest.Mocked<TransferDomainService>;
     authorizationService = module.get<AuthorizationService>(AuthorizationService) as jest.Mocked<AuthorizationService>;
-    notificationService = module.get<NotificationService>(NotificationService) as jest.Mocked<NotificationService>;
+    notificationService = module.get<RabbitmqNotificationService>(RabbitmqNotificationService) as jest.Mocked<RabbitmqNotificationService>;
   });
 
   it('should throw an error if payer or payee is not found', async () => {

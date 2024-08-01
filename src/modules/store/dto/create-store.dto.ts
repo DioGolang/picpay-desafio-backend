@@ -7,13 +7,13 @@ export class CreateStoreDto {
 
   @IsNotEmpty({ message: 'CNPJ is required' })
   @Length(14, 14, { message: 'CNPJ must be 14 characters' })
-  @IsUnique('cnpj', { message: 'CNPJ must be unique' })
+  //@IsUnique('cnpj', { message: 'CNPJ must be unique' })
   cnpj: string;
 
 
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Email is invalid' })
-  @IsUnique('email', { message: 'Email must be unique' })
+  //@IsUnique('email', { message: 'Email must be unique' })
   email: string;
 
   @IsNotEmpty({ message: 'Password is required' })
