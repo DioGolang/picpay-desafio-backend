@@ -74,11 +74,17 @@ Cada classe no projeto tem uma única responsabilidade, e as dependências são 
 1. crie uma arquivo .env: 
 
 ```dotenv
+DATABASE_URL=
 POSTGRES_DB=
 POSTGRES_USER=
 POSTGRES_PASSWORD=
 RABBITMQ_DEFAULT_USER=
 RABBITMQ_DEFAULT_PASS=
+RABBITMQ_QUEUE=notifications_queue
+NOTIFICATION_EMAIL_URL='https://util.devi.tools/api/v1/notify'
+AUTHORIZATION_URL='https://util.devi.tools/api/v2/authorize'
+JWT_SECRET=
+JWT_EXPIRES_IN=
 
 ```
 2. crie as pastas na raiz: 
