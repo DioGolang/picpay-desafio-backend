@@ -1,12 +1,22 @@
+### Login
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "chewbacca@petshop.com",
+  "password": "17645678910"
+}
+
+
 ### Create Store
 POST http://localhost:3000/store
 Content-Type: application/json
 
 {
-  "fullName": "Catita23",
-  "cnpj": "55545678911262",
-  "email": "catita2@realstate.com",
-  "password": "{{ $random.alphanumeric(10) }}"
+  "fullName": "chewbacca",
+  "cnpj": "55545678911287",
+  "email": "chewbacca@petshop.com",
+  "password": "17645678910"
 }
 
 ### Create User

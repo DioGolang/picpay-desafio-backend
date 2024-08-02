@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { ITransferRepository } from "../../@core/interfaces/transaction-repository.interface";
 import { Transaction } from "src/@core/entities/transaction.entity";
 import { PrismaService } from "./prisma/prisma.service";
-import { CreateTransferDto } from "../../modules/transfer/dto/create-transfer.dto";
 
 @Injectable()
 export class TransactionRepository implements ITransferRepository {

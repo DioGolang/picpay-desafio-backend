@@ -1,7 +1,7 @@
 import { Store } from "../entities/store.entity";
 import { IStoreRepository } from "../repositories/store.repository";
 import { Inject, Injectable } from "@nestjs/common";
-import { CreateStoreDto } from "../../modules/store/dto/create-store.dto";
+import { CreateStoreDto } from "../../dto/store/create-store.dto";
 
 @Injectable()
 export class CreateStoreUsecase{

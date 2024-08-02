@@ -4,7 +4,7 @@ import { Transaction } from "../../entities/transaction.entity";
 import { TransferStatus } from "../../entities/transaction-status.enum";
 import { User } from "../../entities/user.entity";
 import { Store } from "../../entities/store.entity";
-import { UpdateStrategy } from "../../entities/strategies/update.strategy";
+import { UpdateStrategy } from "../../entities/strategies/update/update.strategy";
 
 @Injectable()
 export class TransferDomainService {

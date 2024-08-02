@@ -4,7 +4,6 @@ import {
 } from "@nestjs/common";
 import { IUserRepository } from '../repositories/user.repository';
 import { IStoreRepository } from '../repositories/store.repository';
-import { CreateTransferDto } from '../../modules/transfer/dto/create-transfer.dto';
 import { Money } from "../value-objects/money.vo";
 import { TransactionRepository } from "../../infrastructure/database/transaction.repository";
 import { TransferDomainService } from "../services/transfer-domain/transfer-domain.service";
@@ -13,6 +12,7 @@ import { Transaction } from "../entities/transaction.entity";
 import { TransferStatus } from "../entities/transaction-status.enum";
 import { INotification } from "../interfaces/notification-service.interface";
 import { IAuthorization } from "../interfaces/authorization.interface";
+import { CreateTransferDto } from "../../dto/transfer/create-transfer.dto";
 
 @Injectable()
 export class TransferFundsUseCase {

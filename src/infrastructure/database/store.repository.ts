@@ -10,11 +10,14 @@ export class StoreRepository implements IStoreRepository {
 
   constructor(private prisma: PrismaService) { }
 
-  private mapToStore(store: any): Store {
+  private mapToStore(store: any): Store | null {
+    if (!store) {
+      return null;
+    }
     return new Store(store.id, store.fullName, store.cnpj, store.email, store.password, new Money(store.balance));
   }
 
- async findById(id: string): Promise<Store> {
+ async findById(id: string): Promise<Store | null> {
     const store = await this.prisma.store.findUnique({where: {id}});
    return this.mapToStore(store);
   }
@@ -34,12 +37,12 @@ export class StoreRepository implements IStoreRepository {
     return this.mapToStore(store);
   }
 
-   async findByEmail(email: string): Promise<Store> {
+   async findByEmail(email: string): Promise<Store | null> {
       const store = await this.prisma.store.findUnique({ where: { email } });
      return this.mapToStore(store);
     }
 
-    async findByCnpj(cnpj: string): Promise<Store> {
+    async findByCnpj(cnpj: string): Promise<Store | null> {
     const store = await this.prisma.store.findUnique({where : { cnpj }});
       return this.mapToStore(store);
     }

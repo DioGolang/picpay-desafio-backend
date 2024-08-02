@@ -1,6 +1,7 @@
 import { Money } from "../value-objects/money.vo";
 import { StoreValidate } from "../services/validation/store.validate";
 import { Payee } from "../interfaces/payee.interface";
+import * as bcrypt from 'bcrypt';
 
 export class Store implements Payee {
   private readonly _validator: StoreValidate;
@@ -22,8 +23,13 @@ export class Store implements Payee {
     return this._balance;
   }
 
+  verifyPassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password);
+  }
+
   static create(fullName: string, cnpj: string, email: string, password: string): Store {
-    return new Store(null, fullName, cnpj, email, password, new Money(0));
+   const passwordHash = bcrypt.hashSync(password, 10);
+    return new Store(null, fullName, cnpj, email, passwordHash, new Money(0));
   }
 
   deposit(amount: Money): void {

@@ -2,6 +2,7 @@ import { Money } from "../value-objects/money.vo";
 import { UserValidate } from "../services/validation/user.validate";
 import { Payer } from "../interfaces/payer.interface";
 import { Payee } from "../interfaces/payee.interface";
+import * as bcrypt from 'bcrypt';
 
 export class User implements Payer, Payee{
 
@@ -24,8 +25,13 @@ export class User implements Payer, Payee{
     return this._balance;
   }
 
-  static create(fullName: string, cnpj: string, email: string, password: string): User {
-    return new User(null, fullName, cnpj, email, password, new Money(0));
+  verifyPassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password);
+  }
+
+  static create(fullName: string, cpf: string, email: string, password: string): User {
+    const passwordHash = bcrypt.hashSync(password, 10);
+    return new User(null, fullName, cpf, email, passwordHash, new Money(0));
   }
 
   deposit(amount: Money): void{

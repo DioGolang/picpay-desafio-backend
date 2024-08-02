@@ -12,7 +12,10 @@ export class UserRepository implements IUserRepository {
 
 
 
-  private mapToUser(user: any): User {
+  private mapToUser(user: any): User | null {
+    if (!user) {
+      return null;
+    }
     return new User(user.id, user.fullName, user.cpf, user.email, user.password, new Money(user.balance));
   }
 
@@ -45,12 +48,12 @@ export class UserRepository implements IUserRepository {
    return this.mapToUser(user);
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { email } });
     return this.mapToUser(user);
   }
 
-  async findByCpf(cpf: string): Promise<User> {
+  async findByCpf(cpf: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { cpf } });
     return this.mapToUser(user);
   }
