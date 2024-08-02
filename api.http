@@ -3,10 +3,11 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "chewbacca@petshop.com",
+  "email": "dog@petshot.com.br",
   "password": "17645678910"
 }
 
+> {% client.global.set("auth_token", response.body.token); %}
 
 ### Create Store
 POST http://localhost:3000/store
@@ -19,24 +20,27 @@ Content-Type: application/json
   "password": "17645678910"
 }
 
+
+
 ### Create User
 POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "DiogoCampos",
-  "cpf": "46643543573",
-  "email": "diogocamp@crecisp.org.br",
+  "fullName": "Gordo",
+  "cpf": "46643543571",
+  "email": "dog@petshot.com.br",
   "password": "17645678910"
 }
 
 ###
 POST http://localhost:3000/transfer
 Content-Type: application/json
+Authorization: Bearer {{ auth_token }}
 
 {
   "amount": 100,
-  "payerId": "9fe29330-d012-4f26-a7ad-07bb420d3513",
+  "payerId": "8645e4f5-1779-49f8-9060-4c982eef82e5",
   "payeeId": "d02ae711-fd7c-41e3-ba6b-ea956ccb4aa4"
 }
 

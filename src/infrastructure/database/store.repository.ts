@@ -22,7 +22,7 @@ export class StoreRepository implements IStoreRepository {
    return this.mapToStore(store);
   }
 
-  async findOne(idOrEmail: string): Promise<Store> {
+  async findOne(idOrEmail: string): Promise<Store | null> {
     const isId = isUUID(idOrEmail, 4);
     const store = await this.prisma.store.findFirst({
       where: isId

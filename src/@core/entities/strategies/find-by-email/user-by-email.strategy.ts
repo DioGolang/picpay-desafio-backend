@@ -9,7 +9,7 @@ export class UserByEmailStrategy implements FindByEmailStrategy<User> {
     @Inject('IUserRepository') private readonly userRepository: UserRepository
   ) {}
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmail(email: string): Promise<User | null> {
     if (!this.userRepository) {
       throw new Error('UserRepository is not defined');
     }

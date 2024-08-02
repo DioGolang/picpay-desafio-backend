@@ -1,3 +1,3 @@
 export interface FindByEmailStrategy<T>{
-  findByEmail(email: string): Promise<T>;
+  findByEmail(email: string): Promise<T | null>;
 }

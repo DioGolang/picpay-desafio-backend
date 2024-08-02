@@ -9,7 +9,7 @@ export class StoreFindByEmailStrategy implements FindByEmailStrategy<Store> {
     @Inject('IStoreRepository') private readonly storeRepository: IStoreRepository
   ) {}
 
-  async findByEmail(email: string): Promise<Store> {
+  async findByEmail(email: string): Promise<Store | null> {
     if (!this.storeRepository) {
       throw new Error('StoreRepository is not defined');
     }

@@ -24,6 +24,7 @@ import { StoreController } from "./infrastructure/controllers/store/store.contro
 import { AuthController } from "./infrastructure/controllers/auth/auth.controller";
 import { LoginUseCaseModule } from "./infrastructure/modules/auth/login-usecase/login-usecase.module";
 import { AuthModule } from "./infrastructure/modules/auth/auth.module";
+import { JwtService } from "@nestjs/jwt";
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { AuthModule } from "./infrastructure/modules/auth/auth.module";
     },
     IsUniqueConstraint,
     AppService,
+    JwtService
   ],
 })
 export class AppModule {}

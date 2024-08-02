@@ -6,6 +6,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConfig } from '../../config/jwt.config';
 import { RepositoryModule } from '../repository/repository.module';
 import { LoginUseCaseModule } from './login-usecase/login-usecase.module';
+import { JwtStrategy } from "../../strategies/jwt.strategy";
+import { JwtAuthGuard } from "../../../application/guards/auth/jwt-auth.guard";
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { LoginUseCaseModule } from './login-usecase/login-usecase.module';
       provide: 'IAuthService',
       useClass: AuthService,
     },
+    JwtStrategy,
+    JwtAuthGuard,
   ],
   exports: ['IAuthService'],
 })

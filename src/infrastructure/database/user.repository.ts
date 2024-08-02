@@ -38,7 +38,7 @@ export class UserRepository implements IUserRepository {
     );
   }
 
- async findOne(idOrEmail: string): Promise<User> {
+ async findOne(idOrEmail: string): Promise<User | null> {
    const isId = isUUID(idOrEmail, 4);
    const user = await this.prisma.user.findFirst({
      where: isId
