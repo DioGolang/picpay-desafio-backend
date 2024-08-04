@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "email": "dog@petshot.com.br",
   "password": "17645678910"
-}
+}git
 
 > {% client.global.set("auth_token", response.body.token); %}
 

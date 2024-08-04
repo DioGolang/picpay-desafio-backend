@@ -23,6 +23,7 @@ export class Transaction {
     }
   }
 
+
   validateSufficientBalance(): void {
     if (this.payer.balance.value < this.amount.value) {
       throw new Error('Insufficient balance');
