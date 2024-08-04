@@ -2,9 +2,9 @@ import { Money } from "../value-objects/money.vo";
 import { StoreValidate } from "../services/validation/store.validate";
 import { Payee } from "../interfaces/payee.interface";
 import * as bcrypt from 'bcrypt';
-import { IAcountStore } from "../interfaces/account-store.interface";
+import { IAccountStore } from "../interfaces/account-store.interface";
 
-export class Store implements IAcountStore, Payee {
+export class Store implements IAccountStore, Payee {
   private readonly _validator: StoreValidate;
 
   constructor(

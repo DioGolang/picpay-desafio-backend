@@ -1,5 +1,5 @@
 import { IAccount } from "./account.interface";
 
-export interface IAcountStore extends IAccount{
+export interface IAccountStore extends IAccount{
   cnpj: string;
 }
