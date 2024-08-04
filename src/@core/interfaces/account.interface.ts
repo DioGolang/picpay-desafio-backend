@@ -6,7 +6,7 @@ export interface IAccount{
   email: string;
   password: string;
   get balance(): Money;
-  verifyPassword(password: string): boolean;
+  verifyPassword(password: string): Promise<boolean>;
   deposit(amount: Money): void;
   withdraw(amount: Money): void;
 }

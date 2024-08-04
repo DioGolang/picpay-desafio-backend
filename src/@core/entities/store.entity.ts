@@ -1,11 +1,13 @@
 import { Money } from "../value-objects/money.vo";
 import { StoreValidate } from "../services/validation/store.validate";
 import { Payee } from "../interfaces/payee.interface";
-import * as bcrypt from 'bcrypt';
 import { IAccountStore } from "../interfaces/account-store.interface";
+import { IHasher } from "../interfaces/hasher.interface";
 
 export class Store implements IAccountStore, Payee {
   private readonly _validator: StoreValidate;
+  private readonly _hashPassword: IHasher;
+  private _balance: Money;
 
   constructor(
     public readonly id: string | null,
@@ -13,9 +15,12 @@ export class Store implements IAccountStore, Payee {
     public readonly cnpj: string,
     public readonly email: string,
     public readonly password: string,
-    private _balance: Money,
+    balance: Money,
+    hashPassword: IHasher,
     validator?: StoreValidate
   ) {
+    this._balance = balance;
+    this._hashPassword = hashPassword;
     this._validator = validator || new StoreValidate();
     this._validator.validate(this);
   }
@@ -24,13 +29,13 @@ export class Store implements IAccountStore, Payee {
     return this._balance;
   }
 
-  verifyPassword(password: string): boolean {
-    return bcrypt.compareSync(password, this.password);
+  async verifyPassword(password: string): Promise<boolean> {
+    return await this._hashPassword.compare(password, this.password);
   }
 
-  static create(fullName: string, cnpj: string, email: string, password: string): Store {
-   const passwordHash = bcrypt.hashSync(password, 10);
-    return new Store(null, fullName, cnpj, email, passwordHash, new Money(0));
+  static async create(fullName: string, cnpj: string, email: string, password: string, hashPassword: IHasher): Promise<Store> {
+    const passwordHash = await hashPassword.hash(password);
+    return new Store(null, fullName, cnpj, email, passwordHash, new Money(0), hashPassword);
   }
 
   deposit(amount: Money): void {
@@ -40,7 +45,4 @@ export class Store implements IAccountStore, Payee {
   withdraw(amount: Money): void {
     this._balance = this._balance.subtract(amount);
   }
-
-
 }
-

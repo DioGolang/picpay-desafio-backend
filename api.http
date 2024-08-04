@@ -27,9 +27,9 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "Gordo",
-  "cpf": "46643543571",
-  "email": "dog@petshot.com.br",
+  "fullName": "Lili",
+  "cpf": "46643543598",
+  "email": "doglili@petshot.com.br",
   "password": "17645678910"
 }
 

@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { PrismaService } from "../../database/prisma/prisma.service";
 import { UserRepository } from "../../database/user.repository";
 import { StoreRepository } from "../../database/store.repository";
+import { HasherModule } from "../hasher/hasher.module";
 
 @Module({
+  imports:[HasherModule],
   providers: [
     PrismaService,
     {

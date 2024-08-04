@@ -25,6 +25,7 @@ import { AuthController } from "./infrastructure/controllers/auth/auth.controlle
 import { LoginUseCaseModule } from "./infrastructure/modules/auth/login-usecase/login-usecase.module";
 import { AuthModule } from "./infrastructure/modules/auth/auth.module";
 import { JwtService } from "@nestjs/jwt";
+import { HasherModule } from "./infrastructure/modules/hasher/hasher.module";
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { JwtService } from "@nestjs/jwt";
     NotificationConsumerModule,
     AuthModule,
     LoginUseCaseModule,
+    HasherModule,
   ],
   controllers: [AppController, TransferController, UserController, StoreController, AuthController],
   providers: [

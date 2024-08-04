@@ -1,5 +1,5 @@
 import { PrismaService } from "./prisma/prisma.service";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Money } from "../../@core/value-objects/money.vo";
 import { User} from "src/@core/entities/user.entity";
 import { IUserRepository } from "../../@core/repositories/user.repository";
@@ -8,7 +8,10 @@ import { isUUID } from "class-validator";
 @Injectable()
 export class UserRepository implements IUserRepository {
 
-  constructor(private prisma: PrismaService ) { }
+  constructor(
+    private prisma: PrismaService,
+    @Inject('IHasher') private readonly hasher
+  ) { }
 
 
 
@@ -16,7 +19,15 @@ export class UserRepository implements IUserRepository {
     if (!user) {
       return null;
     }
-    return new User(user.id, user.fullName, user.cpf, user.email, user.password, new Money(user.balance));
+    return new User(
+      user.id,
+      user.fullName,
+      user.cpf,
+      user.email,
+      user.password,
+      new Money(user.balance),
+      this.hasher
+      );
   }
 
   async findById(id: string): Promise<User | null> {
@@ -34,7 +45,8 @@ export class UserRepository implements IUserRepository {
       user.cpf,
       user.email,
       user.password,
-      new Money(user.balance)
+      new Money(user.balance),
+      this.hasher
     );
   }
 

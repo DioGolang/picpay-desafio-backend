@@ -33,7 +33,6 @@ export class TransferFundsUseCase {
     const payeeStore = await this.storeRepository.findById(payeeId);
     const money = new Money(amount);
     const payee = payeeUser || payeeStore;
-
     await this.prisma.$transaction(async (prisma) => {
       let transfer: Transaction;
       try {

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RabbitRPC } from '@golevelup/nestjs-rabbitmq';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import * as process from "node:process";
 
 @Injectable()
 export class AuthorizationConsumer {
@@ -26,14 +27,16 @@ export class AuthorizationConsumer {
     }
 
     try {
-      const response = await firstValueFrom(this.httpService.get('https://util.devi.tools/api/v2/authorize'));
+      const response = await firstValueFrom(this.httpService.get(
+        process.env.AUTHORIZATION_URL
+      ));
       const { status, data } = response.data;
       console.log(`Authorization result: ${status}, ${data.authorization}`);
 
       return {
         status,
         data,
-        correlationId, // Include the correlationId in the response
+        correlationId,
       };
 
     } catch (error) {
@@ -41,7 +44,7 @@ export class AuthorizationConsumer {
       return {
         status: 'fail',
         data: { authorization: false },
-        correlationId, // Include the correlationId in the error response
+        correlationId,
       };
     }
   }

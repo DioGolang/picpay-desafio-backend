@@ -9,10 +9,10 @@ export class UserUpdateStrategy implements UpdateStrategy {
     @Inject('IUserRepository') private readonly userRepository: IUserRepository
   ) {}
 
-  async update(user: User): Promise<void> {
+  async update(account: User): Promise<void> {
     if (!this.userRepository) {
       throw new Error('UserRepository is not defined');
     }
-    await this.userRepository.update(user);
+    await this.userRepository.update(account);
   }
 }
