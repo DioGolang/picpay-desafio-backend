@@ -3,8 +3,9 @@ import { UserValidate } from "../services/validation/user.validate";
 import { Payer } from "../interfaces/payer.interface";
 import { Payee } from "../interfaces/payee.interface";
 import * as bcrypt from 'bcrypt';
+import { IAccountUser } from "../interfaces/account-user.interface";
 
-export class User implements Payer, Payee{
+export class User implements IAccountUser, Payer, Payee{
 
   private readonly _validator: UserValidate;
 
