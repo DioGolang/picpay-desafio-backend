@@ -1,4 +1,5 @@
 import { Money } from "../value-objects/money.vo";
+import { Cpf } from "../value-objects/cpf.vo";
 import { UserValidate } from "../services/validation/user.validate";
 import { Payer } from "../interfaces/payer.interface";
 import { Payee } from "../interfaces/payee.interface";
@@ -9,18 +10,20 @@ export class User implements IAccountUser, Payer, Payee{
 
   private readonly _validator: UserValidate;
   private readonly _hashPassword: IHasher;
+  private _cpf: Cpf;
   private _balance: Money;
 
   constructor(
     public readonly id: string | null,
     public readonly fullName: string,
-    public readonly cpf: string,
+    cpf: string,
     public readonly email: string,
     public readonly password: string,
     balance: Money,
     hashPassword: IHasher,
     validator?: UserValidate
   ){
+    this._cpf = new Cpf(cpf);
     this._balance = balance;
     this._hashPassword = hashPassword;
     this._validator = validator || new UserValidate();
@@ -29,6 +32,10 @@ export class User implements IAccountUser, Payer, Payee{
 
   get balance(): Money{
     return this._balance;
+  }
+
+  get cpf(): string{
+    return this._cpf.value;
   }
 
   async verifyPassword(password: string): Promise<boolean> {
