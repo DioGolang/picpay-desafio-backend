@@ -26,6 +26,7 @@ import { LoginUseCaseModule } from "./infrastructure/modules/auth/login-usecase/
 import { AuthModule } from "./infrastructure/modules/auth/auth.module";
 import { JwtService } from "@nestjs/jwt";
 import { HasherModule } from "./infrastructure/modules/hasher/hasher.module";
+import { IsCpfConstraint } from "./common/validators/is-cpf.validator";
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { HasherModule } from "./infrastructure/modules/hasher/hasher.module";
       useClass: StoreRepository,
     },
     IsUniqueConstraint,
+    IsCpfConstraint,
     AppService,
     JwtService
   ],

@@ -42,9 +42,9 @@ export class User implements IAccountUser, Payer, Payee{
     return await this._hashPassword.compare(password, this.password);
   }
 
-  static async create(fullName: string, cnpj: string, email: string, password: string, hashPassword: IHasher): Promise<User> {
+  static async create(fullName: string, cpf: string, email: string, password: string, hashPassword: IHasher): Promise<User> {
     const passwordHash = await hashPassword.hash(password);
-    return new User(null, fullName, cnpj, email, passwordHash, new Money(0), hashPassword);
+    return new User(null, fullName, cpf, email, passwordHash, new Money(0), hashPassword);
   }
 
   deposit(amount: Money): void{

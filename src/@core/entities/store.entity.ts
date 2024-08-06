@@ -3,22 +3,25 @@ import { StoreValidate } from "../services/validation/store.validate";
 import { Payee } from "../interfaces/payee.interface";
 import { IAccountStore } from "../interfaces/account-store.interface";
 import { IHasher } from "../interfaces/hasher.interface";
+import { Cnpj } from "../value-objects/cnpj.vo";
 
 export class Store implements IAccountStore, Payee {
   private readonly _validator: StoreValidate;
   private readonly _hashPassword: IHasher;
+  private readonly _cnpj: Cnpj;
   private _balance: Money;
 
   constructor(
     public readonly id: string | null,
     public readonly fullName: string,
-    public readonly cnpj: string,
+    cnpj: string,
     public readonly email: string,
     public readonly password: string,
     balance: Money,
     hashPassword: IHasher,
     validator?: StoreValidate
   ) {
+    this._cnpj = new Cnpj(cnpj);
     this._balance = balance;
     this._hashPassword = hashPassword;
     this._validator = validator || new StoreValidate();
@@ -27,6 +30,10 @@ export class Store implements IAccountStore, Payee {
 
   get balance(): Money {
     return this._balance;
+  }
+
+  get cnpj(): string {
+    return this._cnpj.value;
   }
 
   async verifyPassword(password: string): Promise<boolean> {

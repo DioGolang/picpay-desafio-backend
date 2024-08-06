@@ -1,16 +1,14 @@
-import { IsEmail, IsNotEmpty, Length, Validate } from "class-validator";
-//import { IsUniqueConstraint } from "../../../validators/is-unique.validator";
+import { IsEmail, IsNotEmpty, Length } from "class-validator";
+import { IsCpf } from "../../common/validators/is-cpf.decorator";
 
 export class CreateUserDto {
   @IsNotEmpty({ message: 'Full name is required' })
   fullName: string;
 
-  // @Validate(IsUniqueConstraint, ['cnpj'], {message: "Cnpj must be unique"})
   @IsNotEmpty({ message: 'CPF is required' })
-  @Length(11, 11, { message: 'CPF must be 14 characters' })
+  @IsCpf({ message: 'CPF is invalid' })
   cpf: string;
 
-  // @Validate(IsUniqueConstraint, ['email'], {message: "Email must be unique"})
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Email is invalid' })
   email: string;
