@@ -1,4 +1,4 @@
 
 export interface IEntityFactory<T>{
-  create<T>(data: any): Promise<T>;
+  create(data: any): Promise<T>;
 }

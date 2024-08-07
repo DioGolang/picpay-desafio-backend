@@ -14,7 +14,7 @@ export class GenericFactory{
     this.storeFactory = new StoreFactory();
   }
 
-  create(type: string, data: any){
+  create(type: string, data: any): Promise<User | Store>{
     switch (type){
       case "user":
         return this.userFactory.create(data);

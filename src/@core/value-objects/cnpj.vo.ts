@@ -1,11 +1,11 @@
 export class Cnpj {
 
-  constructor(private readonly value: string) {
-    this.validate(value);
+  constructor(private readonly cnpj: string) {
+    this.validate(cnpj);
   }
 
   get value(): string {
-    return this.value;
+    return this.cnpj;
   }
 
   get MAX_DIGITS(): number {
@@ -30,12 +30,9 @@ export class Cnpj {
 
   private calculateDigit(digits: string, factor: number): number {
     let sum = 0;
-    if (factor < 2 ){
-      factor = 9;
-      }
     for (let i = 0; i < digits.length; i++) {
       sum += parseInt(digits[i]) * factor;
-      factor--;
+     factor = factor < 2 ? 9 : factor--;
     }
     const remainder = sum % 11;
     return remainder < 2 ? 0 : 11 - remainder;

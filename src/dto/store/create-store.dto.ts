@@ -1,13 +1,14 @@
-import { IsEmail, IsNotEmpty, Length, Validate } from "class-validator";
-//import { IsUnique } from "../../../validators/is-unique.decorator";
+import { IsEmail, IsNotEmpty, Length } from "class-validator";
+import { IsCnpj } from "../../common/validators/is-cnpj.decorator";
+
 
 export class CreateStoreDto {
   @IsNotEmpty({ message: 'Full name is required' })
   fullName: string;
 
   @IsNotEmpty({ message: 'CNPJ is required' })
-  @Length(14, 14, { message: 'CNPJ must be 14 characters' })
   //@IsUnique('cnpj', { message: 'CNPJ must be unique' })
+  @IsCnpj({ message: 'CNPJ is invalid' })
   cnpj: string;
 
 

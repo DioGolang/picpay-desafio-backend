@@ -27,6 +27,8 @@ import { AuthModule } from "./infrastructure/modules/auth/auth.module";
 import { JwtService } from "@nestjs/jwt";
 import { HasherModule } from "./infrastructure/modules/hasher/hasher.module";
 import { IsCpfConstraint } from "./common/validators/is-cpf.validator";
+import { FactoryModule } from './infrastructure/modules/factory/factory.module';
+import { IsCnpjConstraint } from "./common/validators/is-cnpj.validator";
 
 @Module({
   imports: [
@@ -43,6 +45,7 @@ import { IsCpfConstraint } from "./common/validators/is-cpf.validator";
     AuthModule,
     LoginUseCaseModule,
     HasherModule,
+    FactoryModule,
   ],
   controllers: [AppController, TransferController, UserController, StoreController, AuthController],
   providers: [
@@ -53,6 +56,7 @@ import { IsCpfConstraint } from "./common/validators/is-cpf.validator";
     },
     IsUniqueConstraint,
     IsCpfConstraint,
+    IsCnpjConstraint,
     AppService,
     JwtService
   ],

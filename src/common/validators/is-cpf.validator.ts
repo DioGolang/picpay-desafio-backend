@@ -1,4 +1,4 @@
-import { validate, ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
+import { ValidationArguments, ValidatorConstraint, ValidatorConstraintInterface } from "class-validator";
 
 @ValidatorConstraint({ async: false })
 export class IsCpfConstraint implements ValidatorConstraintInterface {
