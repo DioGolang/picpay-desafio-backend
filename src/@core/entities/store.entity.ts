@@ -40,10 +40,10 @@ export class Store implements IAccountStore, Payee {
     return await this._hashPassword.compare(password, this.password);
   }
 
-  static async create(fullName: string, cnpj: string, email: string, password: string, hashPassword: IHasher): Promise<Store> {
-    const passwordHash = await hashPassword.hash(password);
-    return new Store(null, fullName, cnpj, email, passwordHash, new Money(0), hashPassword);
-  }
+  // static async create(fullName: string, cnpj: string, email: string, password: string, hashPassword: IHasher): Promise<Store> {
+  //   const passwordHash = await hashPassword.hash(password);
+  //   return new Store(null, fullName, cnpj, email, passwordHash, new Money(0), hashPassword);
+  // }
 
   deposit(amount: Money): void {
     this._balance = this._balance.add(amount);

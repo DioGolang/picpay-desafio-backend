@@ -9,8 +9,6 @@ export class BcryptHasherService implements IHasher {
   }
 
   async compare(payload: string, hashed: string): Promise<boolean> {
-    console.log('Password:', payload);
-    console.log('Hash:', hashed);
     return await bcrypt.compare(payload, hashed);
   }
 }

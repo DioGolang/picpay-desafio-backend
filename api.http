@@ -38,7 +38,7 @@ Authorization: Bearer {{auth_token}}
 
 {
   "amount": 100,
-  "payerId": "8645e4f5-1779-49f8-9060-4c982eef82e5",
+  "payerId": "5e77588a-e6fe-40c8-958f-98557280c023",
   "payeeId": "d02ae711-fd7c-41e3-ba6b-ea956ccb4aa4"
 }
 

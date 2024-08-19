@@ -3,10 +3,12 @@ import { CreateStoreUsecase } from "../../../../@core/use-cases/create-store.use
 import { PrismaService } from "../../../database/prisma/prisma.service";
 import { StoreRepository } from "../../../database/store.repository";
 import { HasherModule } from "../../hasher/hasher.module";
+import { FactoryModule } from "../../factory/factory.module";
 
 @Module({
   imports:[
     HasherModule,
+    FactoryModule
   ],
   providers:[
     CreateStoreUsecase,
