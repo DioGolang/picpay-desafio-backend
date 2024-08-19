@@ -30,6 +30,8 @@ export class AuthService implements IAuthService {
   async validate(email: string, password: string): Promise<User | Store | null> {
     try {
       const user = await this.getFindByEmailStrategy(email);
+      const pass = await user.verifyPassword(password);
+      console.log(pass)
       if (user && await user.verifyPassword(password)) {
         return user;
       }

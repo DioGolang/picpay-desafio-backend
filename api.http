@@ -3,8 +3,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "dog@petshot.com.br",
-  "password": "17645678910"
+  "email": "dvasco@vasco.com.br",
+  "password": "86070829069"
 }
 
 > {% client.global.set("auth_token", response.body.token); %}
@@ -25,10 +25,10 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "fullName": "Neide",
-  "cpf": "54488316050",
-  "email": "neidoca@dega.com.br",
-  "password": "17645678910"
+  "fullName": "Dvasconcellos",
+  "cpf": "86070829069",
+  "email": "dvasco@vasco.com.br",
+  "password": "86070829069"
 }
 
 ###

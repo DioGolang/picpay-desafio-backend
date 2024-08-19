@@ -39,8 +39,11 @@ export class User implements IAccountUser, Payer, Payee{
   }
 
   async verifyPassword(password: string): Promise<boolean> {
+    console.log('Stored Password Hash:', this.password);
+    console.log('Provided Password:', password);
     return await this._hashPassword.compare(password, this.password);
   }
+
 
   static async create(fullName: string, cpf: string, email: string, password: string, hashPassword: IHasher): Promise<User> {
     const passwordHash = await hashPassword.hash(password);

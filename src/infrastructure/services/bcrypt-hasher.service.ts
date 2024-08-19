@@ -2,13 +2,15 @@ import { IHasher } from "../../@core/interfaces/hasher.interface";
 import * as bcrypt from 'bcrypt';
 
 export class BcryptHasherService implements IHasher {
+  private readonly saltRounds: number = 10;
 
-  async hash(payload: string): Promise<string>{
-    return bcrypt.hashSync(payload, 10);
+  async hash(payload: string): Promise<string> {
+    return await bcrypt.hash(payload, this.saltRounds);
   }
 
- async compare(payload: string, hashed: string): Promise<boolean>{
-    return bcrypt.compareSync(payload, hashed);
+  async compare(payload: string, hashed: string): Promise<boolean> {
+    console.log('Password:', payload);
+    console.log('Hash:', hashed);
+    return await bcrypt.compare(payload, hashed);
   }
-
 }

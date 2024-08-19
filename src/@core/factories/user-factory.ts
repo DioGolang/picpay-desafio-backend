@@ -15,6 +15,7 @@ type Userdata = {
 export class UserFactory implements IEntityFactory<User>{
   async create(data: Userdata): Promise<User>{
     const passwordHash = await data.hasher.hash(data.password);
+    console.log('Creating User with password hash:', passwordHash);
     return new User(
       data.id,
       data.fullName,

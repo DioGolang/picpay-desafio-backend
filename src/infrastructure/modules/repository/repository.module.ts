@@ -6,7 +6,7 @@ import { HasherModule } from "../hasher/hasher.module";
 import { FactoryModule } from "../factory/factory.module";
 
 @Module({
-  imports:[HasherModule, FactoryModule],
+  imports:[HasherModule],
   providers: [
     PrismaService,
     {
