@@ -24,6 +24,6 @@ export class StoreFactory implements IEntityFactory<Store>{
       passwordHash,
       new Money(0),
       data.hasher,
-  );
+      );
   }
 }

@@ -20,15 +20,13 @@ Content-Type: application/json
   "password": "17645678910"
 }
 
-
-
 ### Create User
 POST http://localhost:3000/user
 Content-Type: application/json
 
 {
   "fullName": "Neide",
-  "cpf": "46643543500",
+  "cpf": "54488316050",
   "email": "neidoca@dega.com.br",
   "password": "17645678910"
 }
@@ -36,7 +34,7 @@ Content-Type: application/json
 ###
 POST http://localhost:3000/transfer
 Content-Type: application/json
-Authorization: Bearer {{ auth_token }}
+Authorization: Bearer {{auth_token}}
 
 {
   "amount": 100,

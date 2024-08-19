@@ -4,31 +4,33 @@ import { Money } from "../../@core/value-objects/money.vo";
 import { User} from "src/@core/entities/user.entity";
 import { IUserRepository } from "../../@core/repositories/user.repository";
 import { isUUID } from "class-validator";
+import { GenericFactory } from "../../@core/factories/generic-factory";
 
 @Injectable()
 export class UserRepository implements IUserRepository {
 
   constructor(
     private prisma: PrismaService,
+    @Inject(GenericFactory) private readonly genericFactory: GenericFactory,
     @Inject('IHasher') private readonly hasher
   ) { }
 
 
-
-  private mapToUser(user: any): User | null {
+  private async mapToUser(user: any): Promise<User | null> {
     if (!user) {
       return null;
     }
-    return new User(
-      user.id,
-      user.fullName,
-      user.cpf,
-      user.email,
-      user.password,
-      new Money(user.balance),
-      this.hasher
-      );
+    return await this.genericFactory.create('user',{
+      id: user.id,
+      fullName: user.fullName,
+      cpf: user.cpf,
+      email: user.email,
+      password: user.password,
+      balance: new Money(user.balance),
+      hasher: this.hasher,
+    }) as User;
   }
+
 
   async findById(id: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({
@@ -38,16 +40,7 @@ export class UserRepository implements IUserRepository {
     if (!user) {
       return null;
     }
-
-    return new User(
-      user.id,
-      user.fullName,
-      user.cpf,
-      user.email,
-      user.password,
-      new Money(user.balance),
-      this.hasher
-    );
+    return this.mapToUser(user);
   }
 
  async findOne(idOrEmail: string): Promise<User | null> {
@@ -107,5 +100,4 @@ export class UserRepository implements IUserRepository {
       throw new Error(`Error finding user with conditions ${JSON.stringify(conditions)}: ${error.message}`);
     }
   }
-
 }

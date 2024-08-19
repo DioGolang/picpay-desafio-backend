@@ -15,6 +15,6 @@ import { GenericFactory } from "../../../@core/factories/generic-factory";
     },
     GenericFactory,
   ],
-  exports:[GenericFactory],
+  exports:[GenericFactory, 'IEntityFactory<User>', 'IEntityFactory<Store>'],
 })
 export class FactoryModule {}
